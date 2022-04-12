@@ -1,6 +1,8 @@
 package com.meli.Mutants.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,9 @@ public class MutantController {
     private MutantServiceImpl mutantService;
 
     @PostMapping
-    public boolean isMutant(@RequestBody DNADto dnaDto) {
-        return mutantService.isMutant(dnaDto);
+    public ResponseEntity<String> isMutant(@RequestBody DNADto dnaDto) {
+        return mutantService.isMutant(dnaDto)
+                ? new ResponseEntity<>(null, HttpStatus.OK)
+                : new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 }
