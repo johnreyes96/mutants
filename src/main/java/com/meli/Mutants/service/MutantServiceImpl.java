@@ -2,6 +2,7 @@ package com.meli.Mutants.service;
 
 import com.meli.Mutants.model.DNADto;
 import com.meli.Mutants.util.validator.DNAValidatorImpl;
+import com.meli.Mutants.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +13,7 @@ public class MutantServiceImpl implements IMutantService {
         if (!isDNACorrect(dna))
             return false;
 
-        String[][] dnaMatrix = getDnaMatrix(dna);
+        char[][] dnaMatrix = getDnaMatrix(dna);
         return isMutant(dnaMatrix);
     }
 
@@ -21,17 +22,21 @@ public class MutantServiceImpl implements IMutantService {
         return validator.isDNANxN(dna) && validator.isACGT(dna);
     }
 
-    private String[][] getDnaMatrix(DNADto dna) {
+    protected char[][] getDnaMatrix(DNADto dna) {
         String[] dnaArray = dna.getDna();
-        String[][] dnaMatrix = new String[dnaArray.length][dnaArray.length];
+        if (StringUtils.isEmpty(dnaArray)) return new char[0][];
+
+        char[][] dnaMatrix = new char[dnaArray.length][dnaArray.length];
         for (int indexRow = 0; indexRow < dnaArray.length; indexRow++) {
-            String[] columnArray = dnaArray[indexRow].split("");
-            System.arraycopy(columnArray, 0, dnaMatrix[indexRow], 0, columnArray.length);
+            String[] rowArray = dnaArray[indexRow].split("");
+            for (int indexColumn = 0; indexColumn < rowArray.length; indexColumn++) {
+                dnaMatrix[indexRow][indexColumn] = rowArray[indexColumn].charAt(0);
+            }
         }
         return dnaMatrix;
     }
 
-    private boolean isMutant(String[][] dnaMatrix) {
+    private boolean isMutant(char[][] dnaMatrix) {
         return false;
     }
 }
