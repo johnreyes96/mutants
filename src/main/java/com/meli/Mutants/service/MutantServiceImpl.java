@@ -1,9 +1,11 @@
 package com.meli.Mutants.service;
 
+import org.springframework.stereotype.Service;
+
 import com.meli.Mutants.model.DNADto;
+import com.meli.Mutants.transformer.DNADtoTransformer;
 import com.meli.Mutants.util.validator.DNAValidatorImpl;
 import com.meli.Mutants.util.StringUtils;
-import org.springframework.stereotype.Service;
 
 @Service
 public class MutantServiceImpl implements IMutantService {
@@ -13,27 +15,14 @@ public class MutantServiceImpl implements IMutantService {
         if (!isDNACorrect(dna))
             return false;
 
-        char[][] dnaMatrix = getDnaMatrix(dna);
-        return isMutant(dnaMatrix);
+        return isMutant(getDNADtoTransformerInstance().transformerDNADtoToChar(dna));
     }
 
-    private boolean isDNACorrect(DNADto dna) {
-        DNAValidatorImpl validator = new DNAValidatorImpl();
+    protected boolean isDNACorrect(DNADto dna) {
+        if (StringUtils.isEmpty(dna.getDna())) return false;
+
+        DNAValidatorImpl validator = getDNAValidatorImplInstance();
         return validator.isDNANxN(dna) && validator.isACGT(dna);
-    }
-
-    protected char[][] getDnaMatrix(DNADto dna) {
-        String[] dnaArray = dna.getDna();
-        if (StringUtils.isEmpty(dnaArray)) return new char[0][];
-
-        char[][] dnaMatrix = new char[dnaArray.length][dnaArray.length];
-        for (int indexRow = 0; indexRow < dnaArray.length; indexRow++) {
-            String[] rowArray = dnaArray[indexRow].split("");
-            for (int indexColumn = 0; indexColumn < rowArray.length; indexColumn++) {
-                dnaMatrix[indexRow][indexColumn] = rowArray[indexColumn].charAt(0);
-            }
-        }
-        return dnaMatrix;
     }
 
     /**
@@ -80,5 +69,13 @@ public class MutantServiceImpl implements IMutantService {
             }
         }
         return false;
+    }
+
+    public DNADtoTransformer getDNADtoTransformerInstance() {
+        return new DNADtoTransformer();
+    }
+
+    protected DNAValidatorImpl getDNAValidatorImplInstance() {
+        return new DNAValidatorImpl();
     }
 }

@@ -3,6 +3,8 @@ package com.meli.Mutants.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.meli.Mutants.factory.DNAMatrixFactory;
+
 public class StringUtilsTest {
 
     @Test
@@ -25,8 +27,7 @@ public class StringUtilsTest {
 
     @Test
     public void isEmptyWhenArrayHaveItemsThenMustReturnFalseTest() {
-        String[] array = new String[1];
-        array[0] = "ATGCGA";
+        String[] array = DNAMatrixFactory.getDnaArray6x6();
 
         boolean result = StringUtils.isEmpty(array);
 

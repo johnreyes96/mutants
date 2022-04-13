@@ -3,7 +3,6 @@ package com.meli.Mutants.util.validator;
 import java.util.Arrays;
 
 import com.meli.Mutants.model.DNADto;
-import com.meli.Mutants.util.StringUtils;
 
 public class DNAValidatorImpl implements IDNAValidator {
 
@@ -15,7 +14,7 @@ public class DNAValidatorImpl implements IDNAValidator {
     @Override
     public boolean isDNANxN(DNADto dnaDto) {
         String[] dnaArray = dnaDto.getDna();
-        if (StringUtils.isEmpty(dnaArray) || dnaArray.length < 4) return false;
+        if (dnaArray.length < 4) return false;
 
         int arrayLength = dnaArray.length;
         for (String dna : dnaArray) {
@@ -33,8 +32,6 @@ public class DNAValidatorImpl implements IDNAValidator {
      */
     @Override
     public boolean isACGT(DNADto dnaDto) {
-        if (StringUtils.isEmpty(dnaDto.getDna())) return false;
-
         return Arrays.stream(dnaDto.getDna()).allMatch(dnaArray -> dnaArray.matches("(A|C|G|T|a|c|gt)+"));
     }
 }
