@@ -163,100 +163,220 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIsEmptyThenMustReturnFalseTest() {
-        char[][] dnaMatrix = new char[0][];
+    public void isMutantWhenDNAMatrixHaveNoSequencesThenMustReturnFalseTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
+        doReturn(false).when(mutantService).validateObliqueSequence(dnaMatrix);
+        doReturn(false).when(mutantService).validateSequenceVertical(dnaMatrix);
+        doReturn(false).when(mutantService).validateSequenceHorizontal(dnaMatrix);
+        doReturn(false).when(mutantService).validateInverseObliqueSequence(dnaMatrix);
 
         boolean result = mutantService.isMutant(dnaMatrix);
 
         Assertions.assertFalse(result);
-    }
-
-    @Test
-    public void isMutantWhenDNAMatrixIsSmallerOf4x4ThenMustReturnFalseTest() {
-        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix3x3();
-
-        boolean result = mutantService.isMutant(dnaMatrix);
-
-        Assertions.assertFalse(result);
+        verify(mutantService).validateObliqueSequence(dnaMatrix);
+        verify(mutantService).validateSequenceVertical(dnaMatrix);
+        verify(mutantService).validateSequenceHorizontal(dnaMatrix);
+        verify(mutantService).validateInverseObliqueSequence(dnaMatrix);
     }
 
     @Test
     public void isMutantWhenDNAMatrixIs4x4AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithObliqueSequenceFourEqualLetters();
+        doReturn(true).when(mutantService).validateObliqueSequence(dnaMatrix);
 
         boolean result = mutantService.isMutant(dnaMatrix);
 
         Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void isMutantWhenDNAMatrixIs4x4AndHaveOblique2SequenceFourEqualLettersThenMustReturnTrueTest() {
-        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithInverseObliqueSequenceFourEqualLetters();
-
-        boolean result = mutantService.isMutant(dnaMatrix);
-
-        Assertions.assertTrue(result);
+        verify(mutantService).validateObliqueSequence(dnaMatrix);
     }
 
     @Test
     public void isMutantWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersVertical();
+        doReturn(true).when(mutantService).validateSequenceVertical(dnaMatrix);
 
         boolean result = mutantService.isMutant(dnaMatrix);
 
         Assertions.assertTrue(result);
+        verify(mutantService).validateSequenceVertical(dnaMatrix);
     }
 
     @Test
     public void isMutantWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersHorizontal();
+        doReturn(true).when(mutantService).validateSequenceHorizontal(dnaMatrix);
 
         boolean result = mutantService.isMutant(dnaMatrix);
+
+        Assertions.assertTrue(result);
+        verify(mutantService).validateSequenceHorizontal(dnaMatrix);
+    }
+
+    @Test
+    public void isMutantWhenDNAMatrixIs4x4AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithInverseObliqueSequenceFourEqualLetters();
+        doReturn(true).when(mutantService).validateInverseObliqueSequence(dnaMatrix);
+
+        boolean result = mutantService.isMutant(dnaMatrix);
+
+        Assertions.assertTrue(result);
+        verify(mutantService).validateInverseObliqueSequence(dnaMatrix);
+    }
+
+    @Test
+    public void isMutantWhenDNAMatrixIs6x6AndHave4SequencesFourEqualLettersThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequencesFourEqualLettersVerticalHorizontalAndOblique();
+        doReturn(true).when(mutantService).validateObliqueSequence(dnaMatrix);
+        doReturn(true).when(mutantService).validateSequenceVertical(dnaMatrix);
+        doReturn(true).when(mutantService).validateSequenceHorizontal(dnaMatrix);
+        doReturn(true).when(mutantService).validateInverseObliqueSequence(dnaMatrix);
+
+        boolean result = mutantService.isMutant(dnaMatrix);
+
+        Assertions.assertTrue(result);
+        verify(mutantService).validateObliqueSequence(dnaMatrix);
+    }
+
+    @Test
+    public void validateObliqueSequenceWhenDNAMatrixIsEmptyThenMustReturnFalseTest() {
+        char[][] dnaMatrix = new char[0][];
+
+        boolean result = mutantService.validateObliqueSequence(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
+
+        boolean result = mutantService.validateObliqueSequence(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithObliqueSequenceFourEqualLetters();
+
+        boolean result = mutantService.validateObliqueSequence(dnaMatrix);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void validateObliqueSequenceWhenDNAMatrixIs6x6AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithObliqueSequenceFourEqualLetters();
 
-        boolean result = mutantService.isMutant(dnaMatrix);
+        boolean result = mutantService.validateObliqueSequence(dnaMatrix);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHaveOblique2SequenceFourEqualLettersThenMustReturnTrueTest() {
-        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithInverseObliqueSequenceFourEqualLetters();
+    public void validateSequenceVerticalWhenDNAMatrixIsEmptyThenMustReturnFalseTest() {
+        char[][] dnaMatrix = new char[0][];
 
-        boolean result = mutantService.isMutant(dnaMatrix);
+        boolean result = mutantService.validateSequenceVertical(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
+
+        boolean result = mutantService.validateSequenceVertical(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersVertical();
+
+        boolean result = mutantService.validateSequenceVertical(dnaMatrix);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
+    public void validateSequenceVerticalWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequenceFourEqualLettersVertical();
 
-        boolean result = mutantService.isMutant(dnaMatrix);
+        boolean result = mutantService.validateSequenceVertical(dnaMatrix);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
+    public void validateSequenceHorizontalWhenDNAMatrixIsEmptyThenMustReturnFalseTest() {
+        char[][] dnaMatrix = new char[0][];
+
+        boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
+
+        boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersHorizontal();
+
+        boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void validateSequenceHorizontalWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequenceFourEqualLettersHorizontal();
 
-        boolean result = mutantService.isMutant(dnaMatrix);
+        boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHave3SequencesFourEqualLettersThenMustReturnTrueTest() {
-        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequencesFourEqualLettersVerticalHorizontalAndOblique();
+    public void validateInverseObliqueSequenceWhenDNAMatrixIsEmptyThenMustReturnFalseTest() {
+        char[][] dnaMatrix = new char[0][];
 
-        boolean result = mutantService.isMutant(dnaMatrix);
+        boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
+
+        boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithInverseObliqueSequenceFourEqualLetters();
+
+        boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs6x6AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+        char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithInverseObliqueSequenceFourEqualLetters();
+
+        boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
 
         Assertions.assertTrue(result);
     }

@@ -119,6 +119,27 @@ public class DNAMatrixFactory {
         return dnaMatrix4x4;
     }
 
+    public static char[][] getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters() {
+        char[][] dnaMatrix4x4 = new char[4][4];
+        dnaMatrix4x4[0][0] = 'A';
+        dnaMatrix4x4[0][1] = 'T';
+        dnaMatrix4x4[0][2] = 'G';
+        dnaMatrix4x4[0][3] = 'C';
+        dnaMatrix4x4[1][0] = 'C';
+        dnaMatrix4x4[1][1] = 'A';
+        dnaMatrix4x4[1][2] = 'G';
+        dnaMatrix4x4[1][3] = 'T';
+        dnaMatrix4x4[2][0] = 'T';
+        dnaMatrix4x4[2][1] = 'T';
+        dnaMatrix4x4[2][2] = 'A';
+        dnaMatrix4x4[2][3] = 'T';
+        dnaMatrix4x4[3][0] = 'A';
+        dnaMatrix4x4[3][1] = 'G';
+        dnaMatrix4x4[3][2] = 'A';
+        dnaMatrix4x4[3][3] = 'C';
+        return dnaMatrix4x4;
+    }
+
     public static char[][] getDnaMatrix6x6WithObliqueSequenceFourEqualLetters() {
         char[][] dnaMatrix6x6 = new char[6][6];
         dnaMatrix6x6[0][0] = 'A';
@@ -288,12 +309,12 @@ public class DNAMatrixFactory {
         dnaMatrix6x6[0][0] = 'A';
         dnaMatrix6x6[0][1] = 'T';
         dnaMatrix6x6[0][2] = 'G';
-        dnaMatrix6x6[0][3] = 'C';
+        dnaMatrix6x6[0][3] = 'T';
         dnaMatrix6x6[0][4] = 'G';
         dnaMatrix6x6[0][5] = 'A';
         dnaMatrix6x6[1][0] = 'C';
         dnaMatrix6x6[1][1] = 'A';
-        dnaMatrix6x6[1][2] = 'G';
+        dnaMatrix6x6[1][2] = 'T';
         dnaMatrix6x6[1][3] = 'T';
         dnaMatrix6x6[1][4] = 'G';
         dnaMatrix6x6[1][5] = 'C';
@@ -303,7 +324,7 @@ public class DNAMatrixFactory {
         dnaMatrix6x6[2][3] = 'T';
         dnaMatrix6x6[2][4] = 'G';
         dnaMatrix6x6[2][5] = 'T';
-        dnaMatrix6x6[3][0] = 'A';
+        dnaMatrix6x6[3][0] = 'T';
         dnaMatrix6x6[3][1] = 'G';
         dnaMatrix6x6[3][2] = 'A';
         dnaMatrix6x6[3][3] = 'A';

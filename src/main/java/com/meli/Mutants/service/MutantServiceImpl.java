@@ -32,24 +32,22 @@ public class MutantServiceImpl implements IMutantService {
      * obliquely, horizontally, or vertically
      */
     protected boolean isMutant(char[][] dnaMatrix) {
-        for (char[] matrix : dnaMatrix) {
-            for (int indexColumn = 0; indexColumn < matrix.length - 3; indexColumn++) {
-                if (matrix[indexColumn] == matrix[indexColumn + 1]
-                        && matrix[indexColumn] == matrix[indexColumn + 2]
-                        && matrix[indexColumn] == matrix[indexColumn + 3]) {
-                    return true;
-                }
-            }
-        }
-        for (int indexRow = 0; indexRow < dnaMatrix.length - 3; indexRow++) {
-            for (int indexColumn = 0; indexColumn < dnaMatrix[indexRow].length; indexColumn++) {
-                if (dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 1][indexColumn]
-                        && dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 2][indexColumn]
-                        && dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 3][indexColumn]) {
-                    return true;
-                }
-            }
-        }
+        return validateObliqueSequence(dnaMatrix) || validateSequenceVertical(dnaMatrix)
+                || validateSequenceHorizontal(dnaMatrix) || validateInverseObliqueSequence(dnaMatrix);
+    }
+
+    /**
+     * Checks oblique sequence of four identical letters.
+     * <p><pre class="code">
+     * A * * *
+     * * A * *
+     * * * A *
+     * * * * A
+     * </pre>
+     * @param dnaMatrix matrix {@code char[][]} NxN elements with characters ACGT to check
+     * @return {@code true} if oblique sequence of four identical letters
+     */
+    protected boolean validateObliqueSequence(char[][] dnaMatrix) {
         for (int indexRow = 0; indexRow < dnaMatrix.length - 3; indexRow++) {
             for (int indexColumn = 0; indexColumn < dnaMatrix[indexRow].length - 3; indexColumn++) {
                 if (dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 1][indexColumn + 1]
@@ -59,6 +57,69 @@ public class MutantServiceImpl implements IMutantService {
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * Checks sequence of four identical letters vertical.
+     * <p><pre class="code">
+     * * * A *
+     * * * A *
+     * * * A *
+     * * * A *
+     * </pre>
+     * @param dnaMatrix matrix {@code char[][]} NxN elements with characters ACGT to check
+     * @return {@code true} if sequence of four identical letters vertical
+     */
+    protected boolean validateSequenceVertical(char[][] dnaMatrix) {
+        for (int indexRow = 0; indexRow < dnaMatrix.length - 3; indexRow++) {
+            for (int indexColumn = 0; indexColumn < dnaMatrix[indexRow].length; indexColumn++) {
+                if (dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 1][indexColumn]
+                        && dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 2][indexColumn]
+                        && dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 3][indexColumn]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks sequence of four identical letters horizontal.
+     * <p><pre class="code">
+     * * * * *
+     * * * * *
+     * A A A A
+     * * * * *
+     * </pre>
+     * @param dnaMatrix matrix {@code char[][]} NxN elements with characters ACGT to check
+     * @return {@code true} if sequence of four identical letters horizontal
+     */
+    protected boolean validateSequenceHorizontal(char[][] dnaMatrix) {
+        for (char[] matrix : dnaMatrix) {
+            for (int indexColumn = 0; indexColumn < matrix.length - 3; indexColumn++) {
+                if (matrix[indexColumn] == matrix[indexColumn + 1]
+                        && matrix[indexColumn] == matrix[indexColumn + 2]
+                        && matrix[indexColumn] == matrix[indexColumn + 3]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks inverse oblique sequence of four identical letters.
+     * <p><pre class="code">
+     * * * * A
+     * * * A *
+     * * A * *
+     * A * * *
+     * </pre>
+     * @param dnaMatrix matrix {@code char[][]} NxN elements with characters ACGT to check
+     * @return {@code true} if inverse oblique sequence of four identical letters
+     */
+    protected boolean validateInverseObliqueSequence(char[][] dnaMatrix) {
         for (int indexRow = 0; indexRow < dnaMatrix.length - 3; indexRow++) {
             for (int indexColumn = dnaMatrix[indexRow].length - 1; indexColumn >= dnaMatrix[indexRow].length - 3; indexColumn--) {
                 if (dnaMatrix[indexRow][indexColumn] == dnaMatrix[indexRow + 1][indexColumn - 1]
