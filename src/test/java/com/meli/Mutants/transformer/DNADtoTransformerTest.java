@@ -3,6 +3,7 @@ package com.meli.Mutants.transformer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.meli.Mutants.factory.DNADtoFactory;
 import com.meli.Mutants.factory.DNAMatrixFactory;
 import com.meli.Mutants.model.DNADto;
 
@@ -10,8 +11,7 @@ public class DNADtoTransformerTest {
 
     @Test
     public void getDnaMatrixWhenDNAHave3ArraysWith3ItemsThenMustReturn3x3MatrixTest() {
-        DNADto dna = new DNADto();
-        dna.setDna(DNAMatrixFactory.getDnaArray3x3());
+        DNADto dna = DNADtoFactory.unDNADto().conDNA(DNAMatrixFactory.getDnaArray3x3()).getInstance();
         char[][] expected = DNAMatrixFactory.getDnaMatrix3x3();
 
         char[][] dnaMatrix = new DNADtoTransformer().transformerDNADtoToChar(dna);

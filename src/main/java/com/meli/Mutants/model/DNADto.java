@@ -4,6 +4,10 @@ public class DNADto {
 
     private String[] dna;
 
+    public DNADto(String[] dna) {
+        this.dna = dna;
+    }
+
     public String[] getDna() {
         return dna;
     }

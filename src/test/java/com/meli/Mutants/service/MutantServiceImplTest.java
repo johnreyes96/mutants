@@ -3,6 +3,7 @@ package com.meli.Mutants.service;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
+import com.meli.Mutants.factory.DNADtoFactory;
 import com.meli.Mutants.transformer.DNADtoTransformer;
 import com.meli.Mutants.model.DNADto;
 import com.meli.Mutants.factory.DNAMatrixFactory;
@@ -22,7 +23,7 @@ public class MutantServiceImplTest {
 
     @Test
     public void whenIsNotDNACorrectThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
+        DNADto dna = DNADtoFactory.unDNADto().getInstance();
         char[][] dnaMatrix = new char[0][];
         doReturn(false).when(mutantService).isDNACorrect(dna);
 
@@ -35,7 +36,7 @@ public class MutantServiceImplTest {
 
     @Test
     public void whenIsDNACorrectAndIsNotMutantThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
+        DNADto dna = DNADtoFactory.unDNADto().getInstance();
         dna.setDna(DNAMatrixFactory.getDnaArray3x3());
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix3x3();
         DNADtoTransformer dnaDtoTransformer = Mockito.mock(DNADtoTransformer.class);
@@ -55,7 +56,7 @@ public class MutantServiceImplTest {
 
     @Test
     public void whenIsDNACorrectAndIsMutantThenMustReturnTrueTest() {
-        DNADto dna = new DNADto();
+        DNADto dna = DNADtoFactory.unDNADto().getInstance();
         dna.setDna(DNAMatrixFactory.getDnaArray3x3());
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix3x3();
         DNADtoTransformer dnaDtoTransformer = Mockito.mock(DNADtoTransformer.class);
@@ -75,7 +76,7 @@ public class MutantServiceImplTest {
 
     @Test
     public void isDNACorrectWhenDNAArrayIsEmptyThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
+        DNADto dna = DNADtoFactory.unDNADto().getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
 
         boolean result = mutantService.isDNACorrect(dna);
@@ -88,10 +89,9 @@ public class MutantServiceImplTest {
 
     @Test
     public void isDNACorrectWhenIsNotDNANxNAndIsNotACGTThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        dna.setDna(dnaArray);
+        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
         doReturn(false).when(dnaValidator).isDNANxN(dna);
@@ -107,10 +107,9 @@ public class MutantServiceImplTest {
 
     @Test
     public void isDNACorrectWhenIsNotDNANxNAndIsACGTThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        dna.setDna(dnaArray);
+        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
         doReturn(false).when(dnaValidator).isDNANxN(dna);
@@ -126,10 +125,9 @@ public class MutantServiceImplTest {
 
     @Test
     public void isDNACorrectWhenIsDNANxNAndIsNotACGTThenMustReturnFalseTest() {
-        DNADto dna = new DNADto();
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        dna.setDna(dnaArray);
+        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
         doReturn(true).when(dnaValidator).isDNANxN(dna);
@@ -145,10 +143,9 @@ public class MutantServiceImplTest {
 
     @Test
     public void isDNACorrectWhenIsDNANxNAndIsACGTThenMustReturnTrueTest() {
-        DNADto dna = new DNADto();
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        dna.setDna(dnaArray);
+        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
         doReturn(true).when(dnaValidator).isDNANxN(dna);
