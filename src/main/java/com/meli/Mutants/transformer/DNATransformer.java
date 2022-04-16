@@ -1,11 +1,8 @@
 package com.meli.Mutants.transformer;
 
-import com.meli.Mutants.model.DNADto;
+public class DNATransformer {
 
-public class DNADtoTransformer {
-
-    public char[][] transformerDNADtoToChar(DNADto dna) {
-        String[] dnaArray = dna.getDna();
+    public char[][] transformerStringArrayToCharMatrix(String[] dnaArray) {
         char[][] dnaMatrix = new char[dnaArray.length][dnaArray.length];
         for (int indexRow = 0; indexRow < dnaArray.length; indexRow++) {
             String[] rowArray = dnaArray[indexRow].split("");

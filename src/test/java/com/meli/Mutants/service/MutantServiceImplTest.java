@@ -3,9 +3,7 @@ package com.meli.Mutants.service;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
-import com.meli.Mutants.factory.DNADtoFactory;
-import com.meli.Mutants.transformer.DNADtoTransformer;
-import com.meli.Mutants.model.DNADto;
+import com.meli.Mutants.transformer.DNATransformer;
 import com.meli.Mutants.factory.DNAMatrixFactory;
 import com.meli.Mutants.util.validator.DNAValidatorImpl;
 
@@ -22,145 +20,135 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void whenIsNotDNACorrectThenMustReturnFalseTest() {
-        DNADto dna = DNADtoFactory.unDNADto().getInstance();
-        char[][] dnaMatrix = new char[0][];
-        doReturn(false).when(mutantService).isDNACorrect(dna);
+    public void whenDnaArrayIsEmptyThenMustReturnFalseTest() {
+        String[] dnaArray = new String[0];
 
-        boolean result = mutantService.isMutant(dna);
+        boolean result = mutantService.isMutant(dnaArray);
 
         Assertions.assertFalse(result);
-        verify(mutantService).isDNACorrect(dna);
-        verify(mutantService, Mockito.never()).isMutant(dnaMatrix);
+        verify(mutantService, Mockito.never()).isDNACorrect(Mockito.any());
     }
 
     @Test
-    public void whenIsDNACorrectAndIsNotMutantThenMustReturnFalseTest() {
-        DNADto dna = DNADtoFactory.unDNADto().getInstance();
-        dna.setDna(DNAMatrixFactory.getDnaArray3x3());
+    public void whenArrayIsNotEmptyAndIsNotDNACorrectThenMustReturnFalseTest() {
+        String[] dnaArray = new String[1];
+        dnaArray[0] = "A";
+        doReturn(false).when(mutantService).isDNACorrect(dnaArray);
+
+        boolean result = mutantService.isMutant(dnaArray);
+
+        Assertions.assertFalse(result);
+        verify(mutantService).isDNACorrect(dnaArray);
+    }
+
+    @Test
+    public void whenArrayIsNotEmptyAndIsDNACorrectAndIsNotMutantThenMustReturnFalseTest() {
+        String[] dnaArray = DNAMatrixFactory.getDnaArray3x3();
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix3x3();
-        DNADtoTransformer dnaDtoTransformer = Mockito.mock(DNADtoTransformer.class);
-        doReturn(true).when(mutantService).isDNACorrect(dna);
-        doReturn(dnaDtoTransformer).when(mutantService).getDNADtoTransformerInstance();
-        doReturn(dnaMatrix).when(dnaDtoTransformer).transformerDNADtoToChar(dna);
+        DNATransformer dnaDtoTransformer = Mockito.mock(DNATransformer.class);
+        doReturn(true).when(mutantService).isDNACorrect(dnaArray);
+        doReturn(dnaDtoTransformer).when(mutantService).getDNATransformerInstance();
+        doReturn(dnaMatrix).when(dnaDtoTransformer).transformerStringArrayToCharMatrix(dnaArray);
         doReturn(false).when(mutantService).isMutant(dnaMatrix);
 
-        boolean result = mutantService.isMutant(dna);
+        boolean result = mutantService.isMutant(dnaArray);
 
         Assertions.assertFalse(result);
-        verify(mutantService).isDNACorrect(dna);
-        verify(mutantService).getDNADtoTransformerInstance();
-        verify(dnaDtoTransformer).transformerDNADtoToChar(dna);
+        verify(mutantService).isDNACorrect(dnaArray);
+        verify(mutantService).getDNATransformerInstance();
+        verify(dnaDtoTransformer).transformerStringArrayToCharMatrix(dnaArray);
         verify(mutantService).isMutant(dnaMatrix);
     }
 
     @Test
-    public void whenIsDNACorrectAndIsMutantThenMustReturnTrueTest() {
-        DNADto dna = DNADtoFactory.unDNADto().getInstance();
-        dna.setDna(DNAMatrixFactory.getDnaArray3x3());
+    public void whenArrayIsNotEmptyAndIsDNACorrectAndIsMutantThenMustReturnTrueTest() {
+        String[] dnaArray = DNAMatrixFactory.getDnaArray3x3();
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix3x3();
-        DNADtoTransformer dnaDtoTransformer = Mockito.mock(DNADtoTransformer.class);
-        doReturn(true).when(mutantService).isDNACorrect(dna);
-        doReturn(dnaDtoTransformer).when(mutantService).getDNADtoTransformerInstance();
-        doReturn(dnaMatrix).when(dnaDtoTransformer).transformerDNADtoToChar(dna);
+        DNATransformer dnaDtoTransformer = Mockito.mock(DNATransformer.class);
+        doReturn(true).when(mutantService).isDNACorrect(dnaArray);
+        doReturn(dnaDtoTransformer).when(mutantService).getDNATransformerInstance();
+        doReturn(dnaMatrix).when(dnaDtoTransformer).transformerStringArrayToCharMatrix(dnaArray);
         doReturn(true).when(mutantService).isMutant(dnaMatrix);
 
-        boolean result = mutantService.isMutant(dna);
+        boolean result = mutantService.isMutant(dnaArray);
 
         Assertions.assertTrue(result);
-        verify(mutantService).isDNACorrect(dna);
-        verify(mutantService).getDNADtoTransformerInstance();
-        verify(dnaDtoTransformer).transformerDNADtoToChar(dna);
+        verify(mutantService).isDNACorrect(dnaArray);
+        verify(mutantService).getDNATransformerInstance();
+        verify(dnaDtoTransformer).transformerStringArrayToCharMatrix(dnaArray);
         verify(mutantService).isMutant(dnaMatrix);
-    }
-
-    @Test
-    public void isDNACorrectWhenDNAArrayIsEmptyThenMustReturnFalseTest() {
-        DNADto dna = DNADtoFactory.unDNADto().getInstance();
-        DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
-
-        boolean result = mutantService.isDNACorrect(dna);
-
-        Assertions.assertFalse(result);
-        verify(mutantService, Mockito.never()).getDNAValidatorImplInstance();
-        verify(dnaValidator, Mockito.never()).isDNANxN(dna);
-        verify(dnaValidator, Mockito.never()).isACGT(dna);
     }
 
     @Test
     public void isDNACorrectWhenIsNotDNANxNAndIsNotACGTThenMustReturnFalseTest() {
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
-        doReturn(false).when(dnaValidator).isDNANxN(dna);
-        doReturn(false).when(dnaValidator).isACGT(dna);
+        doReturn(false).when(dnaValidator).isDNANxN(dnaArray);
+        doReturn(false).when(dnaValidator).isACGT(dnaArray);
 
-        boolean result = mutantService.isDNACorrect(dna);
+        boolean result = mutantService.isDNACorrect(dnaArray);
 
         Assertions.assertFalse(result);
         verify(mutantService).getDNAValidatorImplInstance();
-        verify(dnaValidator).isDNANxN(dna);
-        verify(dnaValidator, Mockito.never()).isACGT(dna);
+        verify(dnaValidator).isDNANxN(dnaArray);
+        verify(dnaValidator, Mockito.never()).isACGT(dnaArray);
     }
 
     @Test
     public void isDNACorrectWhenIsNotDNANxNAndIsACGTThenMustReturnFalseTest() {
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
-        doReturn(false).when(dnaValidator).isDNANxN(dna);
-        doReturn(true).when(dnaValidator).isACGT(dna);
+        doReturn(false).when(dnaValidator).isDNANxN(dnaArray);
+        doReturn(true).when(dnaValidator).isACGT(dnaArray);
 
-        boolean result = mutantService.isDNACorrect(dna);
+        boolean result = mutantService.isDNACorrect(dnaArray);
 
         Assertions.assertFalse(result);
         verify(mutantService).getDNAValidatorImplInstance();
-        verify(dnaValidator).isDNANxN(dna);
-        verify(dnaValidator, Mockito.never()).isACGT(dna);
+        verify(dnaValidator).isDNANxN(dnaArray);
+        verify(dnaValidator, Mockito.never()).isACGT(dnaArray);
     }
 
     @Test
     public void isDNACorrectWhenIsDNANxNAndIsNotACGTThenMustReturnFalseTest() {
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
-        doReturn(true).when(dnaValidator).isDNANxN(dna);
-        doReturn(false).when(dnaValidator).isACGT(dna);
+        doReturn(true).when(dnaValidator).isDNANxN(dnaArray);
+        doReturn(false).when(dnaValidator).isACGT(dnaArray);
 
-        boolean result = mutantService.isDNACorrect(dna);
+        boolean result = mutantService.isDNACorrect(dnaArray);
 
         Assertions.assertFalse(result);
         verify(mutantService).getDNAValidatorImplInstance();
-        verify(dnaValidator).isDNANxN(dna);
-        verify(dnaValidator).isACGT(dna);
+        verify(dnaValidator).isDNANxN(dnaArray);
+        verify(dnaValidator).isACGT(dnaArray);
     }
 
     @Test
     public void isDNACorrectWhenIsDNANxNAndIsACGTThenMustReturnTrueTest() {
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
         DNAValidatorImpl dnaValidator = Mockito.mock(DNAValidatorImpl.class);
         doReturn(dnaValidator).when(mutantService).getDNAValidatorImplInstance();
-        doReturn(true).when(dnaValidator).isDNANxN(dna);
-        doReturn(true).when(dnaValidator).isACGT(dna);
+        doReturn(true).when(dnaValidator).isDNANxN(dnaArray);
+        doReturn(true).when(dnaValidator).isACGT(dnaArray);
 
-        boolean result = mutantService.isDNACorrect(dna);
+        boolean result = mutantService.isDNACorrect(dnaArray);
 
         Assertions.assertTrue(result);
         verify(mutantService).getDNAValidatorImplInstance();
-        verify(dnaValidator).isDNANxN(dna);
-        verify(dnaValidator).isACGT(dna);
+        verify(dnaValidator).isDNANxN(dnaArray);
+        verify(dnaValidator).isACGT(dnaArray);
     }
 
     @Test
-    public void isMutantWhenDNAMatrixHaveNoSequencesThenMustReturnFalseTest() {
+    public void isMutantWhenDNAMatrixHasNoSequencesThenMustReturnFalseTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
         doReturn(false).when(mutantService).validateObliqueSequence(dnaMatrix);
         doReturn(false).when(mutantService).validateSequenceVertical(dnaMatrix);
@@ -177,7 +165,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs4x4AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void isMutantWhenDNAMatrixIs4x4AndHasObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithObliqueSequenceFourEqualLetters();
         doReturn(true).when(mutantService).validateObliqueSequence(dnaMatrix);
 
@@ -188,7 +176,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
+    public void isMutantWhenDNAMatrixIs4x4AndHasSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersVertical();
         doReturn(true).when(mutantService).validateSequenceVertical(dnaMatrix);
 
@@ -199,7 +187,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
+    public void isMutantWhenDNAMatrixIs4x4AndHasSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersHorizontal();
         doReturn(true).when(mutantService).validateSequenceHorizontal(dnaMatrix);
 
@@ -210,7 +198,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs4x4AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void isMutantWhenDNAMatrixIs4x4AndHasObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithInverseObliqueSequenceFourEqualLetters();
         doReturn(true).when(mutantService).validateInverseObliqueSequence(dnaMatrix);
 
@@ -221,7 +209,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void isMutantWhenDNAMatrixIs6x6AndHave4SequencesFourEqualLettersThenMustReturnTrueTest() {
+    public void isMutantWhenDNAMatrixIs6x6AndHas4SequencesFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequencesFourEqualLettersVerticalHorizontalAndOblique();
         doReturn(true).when(mutantService).validateObliqueSequence(dnaMatrix);
         doReturn(true).when(mutantService).validateSequenceVertical(dnaMatrix);
@@ -244,7 +232,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHasNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
 
         boolean result = mutantService.validateObliqueSequence(dnaMatrix);
@@ -253,7 +241,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void validateObliqueSequenceWhenDNAMatrixIs4x4AndHasObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithObliqueSequenceFourEqualLetters();
 
         boolean result = mutantService.validateObliqueSequence(dnaMatrix);
@@ -262,7 +250,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateObliqueSequenceWhenDNAMatrixIs6x6AndHaveObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void validateObliqueSequenceWhenDNAMatrixIs6x6AndHasObliqueSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithObliqueSequenceFourEqualLetters();
 
         boolean result = mutantService.validateObliqueSequence(dnaMatrix);
@@ -280,7 +268,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHasNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
 
         boolean result = mutantService.validateSequenceVertical(dnaMatrix);
@@ -289,7 +277,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
+    public void validateSequenceVerticalWhenDNAMatrixIs4x4AndHasSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersVertical();
 
         boolean result = mutantService.validateSequenceVertical(dnaMatrix);
@@ -298,7 +286,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceVerticalWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
+    public void validateSequenceVerticalWhenDNAMatrixIs6x6AndHasSequenceFourEqualLettersVerticalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequenceFourEqualLettersVertical();
 
         boolean result = mutantService.validateSequenceVertical(dnaMatrix);
@@ -316,7 +304,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHasNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
 
         boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
@@ -325,7 +313,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
+    public void validateSequenceHorizontalWhenDNAMatrixIs4x4AndHasSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithSequenceFourEqualLettersHorizontal();
 
         boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
@@ -334,7 +322,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateSequenceHorizontalWhenDNAMatrixIs6x6AndHaveSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
+    public void validateSequenceHorizontalWhenDNAMatrixIs6x6AndHasSequenceFourEqualLettersHorizontalThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithSequenceFourEqualLettersHorizontal();
 
         boolean result = mutantService.validateSequenceHorizontal(dnaMatrix);
@@ -352,7 +340,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHaveNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHasNotObliqueSequenceFourEqualLettersThenMustReturnFalseTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithoutNoneSequenceOfFourEqualLetters();
 
         boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
@@ -361,7 +349,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs4x4AndHasObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix4x4WithInverseObliqueSequenceFourEqualLetters();
 
         boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);
@@ -370,7 +358,7 @@ public class MutantServiceImplTest {
     }
 
     @Test
-    public void validateInverseObliqueSequenceWhenDNAMatrixIs6x6AndHaveObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
+    public void validateInverseObliqueSequenceWhenDNAMatrixIs6x6AndHasObliqueInverseSequenceFourEqualLettersThenMustReturnTrueTest() {
         char[][] dnaMatrix = DNAMatrixFactory.getDnaMatrix6x6WithInverseObliqueSequenceFourEqualLetters();
 
         boolean result = mutantService.validateInverseObliqueSequence(dnaMatrix);

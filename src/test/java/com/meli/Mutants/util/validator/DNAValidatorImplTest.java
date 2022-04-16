@@ -6,9 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.meli.Mutants.factory.DNADtoFactory;
 import com.meli.Mutants.factory.DNAMatrixFactory;
-import com.meli.Mutants.model.DNADto;
 
 public class DNAValidatorImplTest {
 
@@ -23,9 +21,8 @@ public class DNAValidatorImplTest {
     public void isDNANxNWhenDNAMatrixHaveLess4RowsThenMustReturnFalseTest() {
         String[] dnaArray = new String[1];
         dnaArray[0] = "A";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
 
-        boolean result = dnaValidator.isDNANxN(dna);
+        boolean result = dnaValidator.isDNANxN(dnaArray);
 
         Assertions.assertFalse(result);
     }
@@ -37,41 +34,39 @@ public class DNAValidatorImplTest {
         dnaArray[1] = "AAGT";
         dnaArray[2] = "GTA";
         dnaArray[3] = "GCTA";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
 
-        boolean result = dnaValidator.isDNANxN(dna);
+        boolean result = dnaValidator.isDNANxN(dnaArray);
 
         Assertions.assertFalse(result);
     }
 
     @Test
     public void isDNANxNWhenDNAMatrixIsNxNThenMustReturnTrueTest() {
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(DNAMatrixFactory.getDnaArray6x6()).getInstance();
+        String[] dnaArray = DNAMatrixFactory.getDnaArray6x6();
 
-        boolean result = dnaValidator.isDNANxN(dna);
+        boolean result = dnaValidator.isDNANxN(dnaArray);
 
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void isACGTWhenDNAMatrixHaveLettersOtherThanACGTThenMustReturnFalseTest() {
+    public void isACGTWhenDNAMatrixHasLettersOtherThanACGTThenMustReturnFalseTest() {
         String[] dnaArray = new String[4];
         dnaArray[0] = "ACTG";
         dnaArray[1] = "AAPT";
         dnaArray[2] = "GTAC";
         dnaArray[3] = "GCTA";
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(dnaArray).getInstance();
 
-        boolean result = dnaValidator.isACGT(dna);
+        boolean result = dnaValidator.isACGT(dnaArray);
 
         Assertions.assertFalse(result);
     }
 
     @Test
-    public void isACGTWhenDNAMatrixOnlyHaveLettersACGTThenMustReturnTrueTest() {
-        DNADto dna = DNADtoFactory.unDNADto().conDNA(DNAMatrixFactory.getDnaArray6x6()).getInstance();
+    public void isACGTWhenDNAMatrixOnlyHasLettersACGTThenMustReturnTrueTest() {
+        String[] dnaArray = DNAMatrixFactory.getDnaArray6x6();
 
-        boolean result = dnaValidator.isACGT(dna);
+        boolean result = dnaValidator.isACGT(dnaArray);
 
         Assertions.assertTrue(result);
     }

@@ -17,7 +17,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void isEmptyWhenArrayHaveNotItemsThenMustReturnTrueTest() {
+    public void isEmptyWhenArrayHasNotItemsThenMustReturnTrueTest() {
         String[] array = new String[0];
 
         boolean result = StringUtils.isEmpty(array);
@@ -26,7 +26,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void isEmptyWhenArrayHaveItemsThenMustReturnFalseTest() {
+    public void isEmptyWhenArrayHasItemsThenMustReturnFalseTest() {
         String[] array = DNAMatrixFactory.getDnaArray6x6();
 
         boolean result = StringUtils.isEmpty(array);

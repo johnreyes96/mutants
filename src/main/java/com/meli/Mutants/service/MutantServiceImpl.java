@@ -2,8 +2,7 @@ package com.meli.Mutants.service;
 
 import org.springframework.stereotype.Service;
 
-import com.meli.Mutants.model.DNADto;
-import com.meli.Mutants.transformer.DNADtoTransformer;
+import com.meli.Mutants.transformer.DNATransformer;
 import com.meli.Mutants.util.validator.DNAValidatorImpl;
 import com.meli.Mutants.util.StringUtils;
 
@@ -11,16 +10,14 @@ import com.meli.Mutants.util.StringUtils;
 public class MutantServiceImpl implements IMutantService {
 
     @Override
-    public boolean isMutant(DNADto dna) {
-        if (!isDNACorrect(dna))
-            return false;
+    public boolean isMutant(String[] dna) {
+        if (StringUtils.isEmpty(dna)) return false;
+        if (!isDNACorrect(dna)) return false;
 
-        return isMutant(getDNADtoTransformerInstance().transformerDNADtoToChar(dna));
+        return isMutant(getDNATransformerInstance().transformerStringArrayToCharMatrix(dna));
     }
 
-    protected boolean isDNACorrect(DNADto dna) {
-        if (StringUtils.isEmpty(dna.getDna())) return false;
-
+    protected boolean isDNACorrect(String[] dna) {
         DNAValidatorImpl validator = getDNAValidatorImplInstance();
         return validator.isDNANxN(dna) && validator.isACGT(dna);
     }
@@ -132,8 +129,8 @@ public class MutantServiceImpl implements IMutantService {
         return false;
     }
 
-    public DNADtoTransformer getDNADtoTransformerInstance() {
-        return new DNADtoTransformer();
+    public DNATransformer getDNATransformerInstance() {
+        return new DNATransformer();
     }
 
     protected DNAValidatorImpl getDNAValidatorImplInstance() {
