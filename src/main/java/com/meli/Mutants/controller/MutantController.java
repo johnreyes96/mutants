@@ -21,7 +21,7 @@ public class MutantController {
     private MutantServiceImpl mutantService;
 
     @PostMapping
-    public ResponseEntity<String> isMutant(@RequestBody DNADto dnaDto) {
+    public ResponseEntity<Void> isMutant(@RequestBody DNADto dnaDto) {
         return mutantService.isMutant(dnaDto.getDna())
                 ? new ResponseEntity<>(null, HttpStatus.OK)
                 : new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
