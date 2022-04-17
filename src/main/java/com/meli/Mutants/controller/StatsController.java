@@ -34,8 +34,8 @@ public class StatsController {
         return statsDto;
     }
 
-    private Double getRatio(long countDNAChecks, long countMutants) {
-        Double ratio = 0d;
+    protected Double getRatio(long countDNAChecks, long countMutants) {
+        double ratio = 0d;
         if (countDNAChecks > 0) {
             ratio = BigDecimal.valueOf(Long.valueOf(countMutants).doubleValue() / Long.valueOf(countDNAChecks).doubleValue())
                     .setScale(2, RoundingMode.HALF_UP)
