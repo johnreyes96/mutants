@@ -17,6 +17,21 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+jar {
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	manifest {
+		attributes(
+				'Implementation-Title': 'Jar',
+				"Main-Class": "com.meli.Mutants.MutantsApplication"
+		)
+	}
+	destinationDirectory = file("$rootDir/tarjet")
+	archivesBaseName = 'mutants'
+	duplicatesStrategy = 'include'
+}
+
 test {
 	useJUnitPlatform()
 }
