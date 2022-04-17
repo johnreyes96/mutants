@@ -10,10 +10,25 @@ Detection of mutants based on DNA sequences.
 URL: https://mutants-pdn.ue.r.appspot.com
 
 ## How use
-Detect whether a human is a human is a mutant based on its DNA sequence.
+Detect whether a human is a mutant based on their DNA sequence:
 
-Method: POST
+* Method: POST
+* Url: https://mutants-pdn.ue.r.appspot.com/mutant/
+* Body
+```json
+{
+  "dna": [
+    "ATGCGA",
+    "CAGTGC",
+    "TTATGT",
+    "AGAAGG",
+    "CCCCTA",
+    "TCACTG"
+  ]
+}
+```
 
-Url: https://mutants-pdn.ue.r.appspot.com/mutant/
+DNA verification statistics:
 
-Body: {"dna":["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]}
+* Method: GET
+* Url: https://mutants-pdn.ue.r.appspot.com/stats
