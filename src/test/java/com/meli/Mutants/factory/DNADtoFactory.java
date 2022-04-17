@@ -1,6 +1,6 @@
 package com.meli.Mutants.factory;
 
-import com.meli.Mutants.model.DNADto;
+import com.meli.Mutants.dto.DNADto;
 
 public class DNADtoFactory implements IFactory<DNADto> {
 

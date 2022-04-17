@@ -1,4 +1,4 @@
-package com.meli.Mutants.model;
+package com.meli.Mutants.dto;
 
 public class DNADto {
 

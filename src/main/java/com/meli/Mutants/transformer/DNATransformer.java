@@ -1,5 +1,10 @@
 package com.meli.Mutants.transformer;
 
+import java.util.Arrays;
+
+import com.meli.Mutants.dto.DNADto;
+import com.meli.Mutants.model.DNA;
+
 public class DNATransformer {
 
     public char[][] transformerStringArrayToCharMatrix(String[] dnaArray) {
@@ -11,5 +16,12 @@ public class DNATransformer {
             }
         }
         return dnaMatrix;
+    }
+
+    public DNA transformerDNADtoToDNA(DNADto dnaDto, boolean isMutant) {
+        DNA dna = new DNA();
+        dna.setDna(Arrays.toString(dnaDto.getDna()));
+        dna.setMutant(isMutant);
+        return dna;
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.meli.Mutants.factory.DNADtoFactory;
 import com.meli.Mutants.factory.DNAMatrixFactory;
-import com.meli.Mutants.model.DNADto;
+import com.meli.Mutants.dto.DNADto;
 import com.meli.Mutants.service.MutantServiceImpl;
 
 import static org.mockito.Mockito.doReturn;
